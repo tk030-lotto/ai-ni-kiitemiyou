@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIに聞いてみよう。 - AI質問アシスタント</title>
+  <meta name="description" content="分からないことを入力するだけで、ChatGPT・Claude・GeminiなどのAIへそのまま送れる効果的な質問文を即時生成するWebツールです。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="badge">シリーズ第3弾 / 初心者向けWebツール</div>
+      <h1 class="title">AIに聞いてみよう。</h1>
+      <p class="subtitle">AI質問アシスタント</p>
+      <p class="lead-text">
+        分からないことがあったら、AIに聞いてみましょう。<br>
+        うまく質問できなくても大丈夫。思ったことやエラーをそのまま入力してください。
+      </p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Input Section -->
+      <section class="card input-card" id="inputSection">
+        <div class="card-header">
+          <label for="userInput" class="section-title">
+            <span class="step-num">1</span> 何が分からないですか？
+          </label>
+          <span class="char-counter" id="charCount">0 文字</span>
+        </div>
+
+        <div class="preset-chips">
+          <span class="preset-label">よくある例：</span>
+          <button type="button" class="chip" data-example="このエラーの意味が分からない">エラーの意味が分からない</button>
+          <button type="button" class="chip" data-example="どうやってこの機能を作ればいい？">機能の作り方が分からない</button>
+          <button type="button" class="chip" data-example="AIが作ったコードが動かない">コードが動かない</button>
+          <button type="button" class="chip" data-example="次に何をすればいい？">次に何をすればいい？</button>
+          <button type="button" class="chip" data-example="この設定が合っているか分からない">設定が合っているか不安</button>
+        </div>
+
+        <div class="textarea-wrapper">
+          <textarea
+            id="userInput"
+            rows="5"
+            placeholder="例：ファイルを保存しようとするとエラーになる。何が悪いのか分からない&#10;例：ボタンを押したときにモーダルを開く機能をどう実装すればいい？&#10;※殴り書きやエラーメッセージの貼り付けでもOKです。"
+            autofocus
+          ></textarea>
+        </div>
+
+        <!-- Optional Context Toggle -->
+        <div class="optional-context-accordion">
+          <button type="button" class="accordion-toggle" id="toggleDetailBtn">
+            <span class="toggle-icon">＋</span>
+            <span>開発環境やコードも一緒に送る（任意）</span>
+          </button>
+          <div class="accordion-content" id="detailFields" style="display: none;">
+            <div class="field-group">
+              <label for="langEnvInput" class="sub-label">使用言語・環境（例: Python, JavaScript, HTML, Next.js等）</label>
+              <input type="text" id="langEnvInput" placeholder="例: HTML/JavaScript, Python 3.11">
+            </div>
+            <div class="field-group">
+              <label for="errorCodeInput" class="sub-label">該当コードやエラーログ（あれば貼り付け）</label>
+              <textarea id="errorCodeInput" rows="3" placeholder="コードやエラーメッセージを貼り付け"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button type="button" class="btn btn-primary" id="generateBtn">
+            <span class="btn-icon">✨</span> AIへの質問文を作る
+          </button>
+          <button type="button" class="btn btn-ghost" id="clearInputBtn">クリア</button>
+        </div>
+      </section>
+
+      <!-- Output Section (Hidden initially) -->
+      <section class="card output-card" id="outputSection" style="display: none;">
+        <div class="card-header">
+          <div class="section-title">
+            <span class="step-num">2</span> 生成された質問文
+          </div>
+          <div class="output-actions-header">
+            <button type="button" class="btn btn-copy" id="copyTopBtn">
+              <span class="btn-icon">📋</span> コピー
+            </button>
+          </div>
+        </div>
+
+        <p class="output-guide">
+          この文章をコピーして、普段使っているAI（ChatGPT, Claude, Geminiなど）へ送信してください。
+        </p>
+
+        <!-- Prompt Preview Box -->
+        <div class="prompt-box">
+          <pre id="promptResult"><code></code></pre>
+        </div>
+
+        <!-- Prompt Modifier Tabs -->
+        <div class="tune-section">
+          <span class="tune-label">質問スタイルの調整：</span>
+          <div class="tune-buttons">
+            <button type="button" class="btn-tune active" data-tune="standard">標準</button>
+            <button type="button" class="btn-tune" data-tune="step-by-step">修正手順に絞る</button>
+            <button type="button" class="btn-tune" data-tune="cause-only">原因の究明に絞る</button>
+            <button type="button" class="btn-tune" data-tune="simple">もっとシンプルに</button>
+            <button type="button" class="btn-tune" data-tune="beginner">初心者向けに解説</button>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-row output-actions">
+          <button type="button" class="btn btn-primary btn-large" id="copyMainBtn">
+            <span class="btn-icon">📋</span> 質問文をコピーする
+          </button>
+          <button type="button" class="btn btn-secondary" id="editBtn">
+            <span class="btn-icon">✏️</span> 入力を修正する
+          </button>
+          <button type="button" class="btn btn-ghost" id="resetBtn">
+            <span class="btn-icon">🔄</span> 最初からやり直す
+          </button>
+        </div>
+
+        <!-- External AI Links Helper -->
+        <div class="ai-links-box">
+          <p class="ai-links-title">コピーしたらAIに送りましょう：</p>
+          <div class="ai-chips">
+            <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="ai-link-chip">ChatGPT ↗</a>
+            <a href="https://claude.ai/" target="_blank" rel="noopener noreferrer" class="ai-link-chip">Claude ↗</a>
+            <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="ai-link-chip">Gemini ↗</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-links">
+        <a href="https://github.com/tk030-lotto/ai-ni-kiitemiyou" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        <span>•</span>
+        <span>MIT License</span>
+        <span>•</span>
+        <span>躊躇してないで、とにかく作ってみよう。シリーズ</span>
+      </div>
+      <p class="copyright">&copy; 2026 tk030. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="alert" aria-live="polite">
+    <span class="toast-icon">✅</span>
+    <span class="toast-message" id="toastMessage">コピーしました。AIに送ってみましょう！</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
