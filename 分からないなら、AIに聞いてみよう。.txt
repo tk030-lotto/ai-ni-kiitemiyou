@@ -2,6 +2,9 @@
 
 ## ――AI開発初心者のための小さな質問アシスタント
 
+▼ Webアプリ公開URL（無料・インストール不要・ブラウザですぐ使えます）
+https://tk030-lotto.github.io/ai-ni-kiitemiyou/
+
 AIを使ってソフトウェアを作り始めると、いろいろなところで止まります。
 
 エラーが出た。
@@ -384,3 +387,12 @@ AIに聞いてみる。
 **「AIに聞いてみよう。」**
 
 を使ってみてください。
+
+---
+
+## リンク・リポジトリ
+
+- **Webアプリ公開URL**: https://tk030-lotto.github.io/ai-ni-kiitemiyou/
+- **GitHubリポジトリ**: https://github.com/tk030-lotto/ai-ni-kiitemiyou
+
+#AI #AIツール #プログラミング初心者 #Webアプリ #ChatGPT #Claude #Gemini #個人開発
