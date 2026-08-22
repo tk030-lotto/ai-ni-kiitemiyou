@@ -10,6 +10,8 @@
 - リポジトリの公開設定（Public）への切り替えを実施。
 - GitHub Pages（`main` ブランチ / root）の有効化・ビルドデプロイ完了。
 - 公開URL（https://tk030-lotto.github.io/ai-ni-kiitemiyou/）の配信と正常表示を確認。
+- 記事テキスト（`分からないなら、AIに聞いてみよう。.txt`）に公開URL・リポジトリURL・ハッシュタグを追記。
+- GitHubリポジトリのAbout欄（Description, Homepage URL, Topics 8種）を設定完了。
 
 ### 2026-08-21
 - プライベートリポジトリ `ai-ni-kiitemiyou` を新規作成・GitHub連携完了。
