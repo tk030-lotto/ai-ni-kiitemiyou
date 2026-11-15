@@ -89,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Header Instruction
     prompt += `【質問内容】\n`;
-    prompt += `現在、ソフトウェア開発を行っています。\n`;
     prompt += `以下の点について、分かりやすく教えてください。\n\n`;
 
     // 1. Main Problem / Goal
@@ -184,7 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 8. Clipboard Copy Helper
   async function copyToClipboard(text) {
-    if (!text) return;
+    if (!text) {
+      showToast('⚠️ コピーする質問文がありません。先に質問文を作成してください。');
+      return;
+    }
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(text);
@@ -197,8 +199,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(textarea);
         textarea.focus();
         textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
+        try {
+          const copied = document.execCommand('copy');
+          if (!copied) {
+            throw new Error('document.execCommand("copy") returned false');
+          }
+        } finally {
+          document.body.removeChild(textarea);
+        }
       }
       showToast('📋 コピーしました。AIに送ってみましょう！');
     } catch (err) {
